@@ -1,0 +1,2 @@
+cd \Users\sydney\Desktop\VS-Code\boolean-uk-js-instabool
+json-server --watch db/db.json --routes db/routes.json
