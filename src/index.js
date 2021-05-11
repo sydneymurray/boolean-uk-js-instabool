@@ -112,7 +112,6 @@ function displayPostCard(pet){
                     imageId: pet.id    
                 })
             })
-            console.log(commentInput.value)
         })       
  }
 
