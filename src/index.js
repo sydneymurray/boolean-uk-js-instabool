@@ -8,7 +8,6 @@ function retrievePetData(){
             return promise.json()})
         .then(function (pets){
             displayPets(pets)})
-
 }
 
 // DISPLAY ALL THE PETS
@@ -50,7 +49,7 @@ function displayPostCard(pet){
         // DISPLAY LIKES
         let likes = document.createElement("span")
         likes.setAttribute("class","likes")
-        likes.innerText = pet.likes
+        likes.innerText = pet.likes + ' Likes'
         likeContainer.append(likes)
 
         // CREATE A LIKE BUTTON
@@ -59,12 +58,22 @@ function displayPostCard(pet){
         likeButton.innerText = "♥"
         likeContainer.append(likeButton)
 
+        // CREATE AN EVENT HANDLER TO INCREASE LIKES
+        likeButton.addEventListener("click", function(){
+            pet.likes++
+            fetch(`http://localhost:3000/images/${pet.id}`,{
+                method:'PATCH',
+                headers:{'Content-Type': 'Application/json'},
+                body: JSON.stringify({likes: pet.likes})
+            })
+        })
+
     // CREATE AN UNORDERED LIST FOR COMMENTS
     let commentsContainer = document.createElement("ul")
     commentsContainer.setAttribute("class","comments")
     postCard.append(commentsContainer) 
 
-        // DISPLAY EACH COMMNENT A LIST ITEM
+        // DISPLAY EACH COMMENT A LIST ITEM
         for(let i = 0; i < pet.comments.length; i++){
             let commentLi = document.createElement("li")
             commentLi.innerText = pet.comments[i].content
@@ -89,16 +98,24 @@ function displayPostCard(pet){
         submitButton.setAttribute("required","true")
         submitButton.innerText = "Post"
         commentForm.append(submitButton)
-
-        // CREATE AN EVENT HANDLER FOR SUBMIT COMMENT
+ 
+        // CREATE AN EVENT HANDLER FOR SUBMIT COMMENT BUTTON
         submitButton.addEventListener("click", function(event){
             // Prevent Page Refresh on Button Click
             event.preventDefault()
-            pet.comments.push(commentInput.value)
-            console.log(pet.comments)
-        }) 
-    
-}
+            // UPDATE COMMENTS ARRAY
+            fetch(`http://localhost:3000/comments`,{
+                method:'POST',
+                headers:{'Content-Type': 'Application/json'},
+                body: JSON.stringify({
+                    content: commentInput.value,
+                    imageId: pet.id    
+                })
+            })
+            console.log(commentInput.value)
+        })       
+ }
+
 
 // MAIN PROGRAM STARTS HERE ////////////////////////////////////
 
