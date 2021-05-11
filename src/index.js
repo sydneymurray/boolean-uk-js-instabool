@@ -2,7 +2,7 @@
 // FUNCTION DECLARATIONS ////////////////////////////////////////
 
 // RETRIEVE THE PETS ARRAY FROM THE JSON
-function retrievePetData(){
+function displayPetData(){
     fetch("http://localhost:3000/images")
         .then(function (promise){
             return promise.json()})
@@ -115,7 +115,36 @@ function displayPostCard(pet){
         })       
  }
 
+ function displayCommentForm(){
+
+    // FIND THE FORM DATA ELEMENTS
+    let commentText = document.querySelector("#title")
+    let commentImage = document.querySelector("#image")
+    let commentButton = document.querySelector(".comment-button")
+     
+    // CREATE AN EVENT HANDLER FOR SUBMIT COMMENT BUTTON
+    commentButton.addEventListener("click", function(event){
+ 
+        // Prevent Page Refresh on Button Click
+        event.preventDefault()
+
+        // UPDATE THE ARRAY 
+        fetch(`http://localhost:3000/images`,{
+            method:'POST',
+            headers:{'Content-Type': 'Application/json'},
+            body: JSON.stringify({
+                title: commentText.value,
+                image: commentImage.value,
+                likes: 0    
+            })
+        })  
+    })    
+ }
+
+
 
 // MAIN PROGRAM STARTS HERE ////////////////////////////////////
 
-retrievePetData()
+displayPetData()
+
+displayCommentForm()
